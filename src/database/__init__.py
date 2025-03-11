@@ -32,6 +32,7 @@ if not db.connect():
 
 
 class Anno(Model):
+    language = CharField()
     title = TextField()
     detail = TextField()
     start = DateTimeField()
