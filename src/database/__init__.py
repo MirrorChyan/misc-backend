@@ -33,8 +33,8 @@ if not db.connect():
 
 class Anno(Model):
     language = CharField()
-    title = TextField()
-    detail = TextField()
+    summary = TextField()
+    details = TextField()
     start = DateTimeField()
     end = DateTimeField()
 

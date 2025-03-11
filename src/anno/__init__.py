@@ -24,11 +24,12 @@ async def query_anno(lang: str):
         logger.trace(f"Anno not found, {now}, {lang}")
         return {"ec": 404, "msg": "Not Found"}
 
-    logger.info(f"Anno: {now}, {lang}, {anno.title}")
+    logger.info(f"Anno: {now}, {lang}, {anno.summary}")
     return {
         "ec": 200,
+        "msg": "OK",
         "data": {
-            "title": anno.title,
-            "detail": anno.detail,
+            "summary": anno.summary,
+            "details": anno.details,
         }
     }
