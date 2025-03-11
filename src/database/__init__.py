@@ -1,0 +1,45 @@
+from loguru import logger
+from peewee import (
+    MySQLDatabase,
+    CompositeKey,
+    Model,
+    CharField,
+    TextField,
+    DateTimeField,
+    IntegerField,
+)
+from playhouse.shortcuts import ReconnectMixin
+
+from src.config import settings
+
+
+class ReconnectMySQLDatabase(ReconnectMixin, MySQLDatabase):
+    pass
+
+
+db = ReconnectMySQLDatabase(
+    database=settings.database,
+    host=settings.database_host,
+    port=settings.database_port,
+    user=settings.database_user,
+    password=settings.database_passwd,
+    charset="utf8mb4",
+)
+
+if not db.connect():
+    logger.error("Database connection failed")
+    raise ValueError("Database connection failed")
+
+
+class Anno(Model):
+    title = TextField()
+    detail = TextField()
+    start = DateTimeField()
+    end = DateTimeField()
+
+    class Meta:
+        database = db
+        table_name = "anno"
+
+
+Anno.create_table()
