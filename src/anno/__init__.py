@@ -7,6 +7,7 @@ from src.config import settings
 
 router = APIRouter()
 
+
 @router.get("/anno")
 async def query_anno(lang: str):
     if not lang:
@@ -31,5 +32,5 @@ async def query_anno(lang: str):
         "data": {
             "summary": anno.summary,
             "details": anno.details,
-        }
+        },
     }
