@@ -43,4 +43,16 @@ class Anno(Model):
         table_name = "anno"
 
 
+class Plan(Model):
+    plan_index = IntegerField()
+    platform = CharField()
+    plan_id = CharField()
+    type_id = CharField()
+    popular = IntegerField()
+
+    class Meta:
+        database = db
+        table_name = "plan"
+
 Anno.create_table()
+Plan.create_table()
