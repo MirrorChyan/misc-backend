@@ -22,7 +22,7 @@ async def query_anno(type_id: str = "GameTools"):
     now = time()
     global plan_cache
     if not plan_cache or (now - plan_cache[1] > CacheExpiration):
-        plan_cache = (Plan.select().order_by(Plan.plan_index), now)
+        plan_cache = (Plan.select().where(Plan.available == True).order_by(Plan.plan_index), now)
 
     data = {
         "home": [],
