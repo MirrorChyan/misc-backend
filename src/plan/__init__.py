@@ -49,4 +49,7 @@ async def query_anno(type_id: str = "GameTools"):
                 }
             )
 
+    if not data["home"]:
+        data["home"], data["more"] = data["more"], data["home"]
+
     return {"ec": 200, "data": data}
