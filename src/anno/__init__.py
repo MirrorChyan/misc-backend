@@ -3,7 +3,6 @@ from fastapi import APIRouter, Request
 from loguru import logger
 
 from src.database import Anno
-from src.config import settings
 
 router = APIRouter()
 

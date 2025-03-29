@@ -7,6 +7,7 @@ from peewee import (
     TextField,
     DateTimeField,
     IntegerField,
+    BooleanField,
 )
 from playhouse.shortcuts import ReconnectMixin
 
@@ -43,4 +44,17 @@ class Anno(Model):
         table_name = "anno"
 
 
+class Plan(Model):
+    plan_index = IntegerField()
+    platform = CharField()
+    plan_id = CharField()
+    type_id = CharField()
+    popular = IntegerField()
+    available = BooleanField()
+
+    class Meta:
+        database = db
+        table_name = "plan"
+
 Anno.create_table()
+Plan.create_table()
