@@ -8,7 +8,7 @@ RUN python3 -m pip install -r requirements.txt --no-cache-dir
 
 COPY . .
 
-EXPOSE 8000
+EXPOSE 8081
 
 ENTRYPOINT ["python3", "-m", "uvicorn", "main:app" , "--port", "8081"]
 
