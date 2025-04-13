@@ -56,5 +56,21 @@ class Plan(Model):
         database = db
         table_name = "plan"
 
+class Project(Model):
+    type_id = CharField()
+    proj_index = IntegerField()
+    rid = CharField()
+    name = CharField()
+    desc = TextField()
+    image = TextField()
+    url = TextField()
+    platform = TextField()
+    available = BooleanField()
+
+    class Meta:
+        database = db
+        table_name = "project"
+
 Anno.create_table()
 Plan.create_table()
+Project.create_table()
