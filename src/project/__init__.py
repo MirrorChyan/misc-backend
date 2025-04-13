@@ -41,6 +41,7 @@ async def query_project(type_id: str = "GameTools"):
             "support": [
                 platform.strip() for platform in p.platform.split(",") if platform.strip()
             ],
+            "download": p.download,
         }
         for p in project_cache[0]
         if p.type_id == type_id
