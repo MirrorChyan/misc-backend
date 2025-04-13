@@ -65,6 +65,7 @@ class Project(Model):
     image = TextField()
     url = TextField()
     platform = TextField()
+    download = BooleanField()
     available = BooleanField()
 
     class Meta:
