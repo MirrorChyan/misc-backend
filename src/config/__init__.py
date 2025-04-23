@@ -7,6 +7,8 @@ class Settings(BaseSettings):
     database_port: int
     database_user: str
     database_passwd: str
+    icp_beian: str
+    icp_url: str
 
     class Config:
         env_file = ".env"
