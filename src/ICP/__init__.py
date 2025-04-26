@@ -12,4 +12,5 @@ async def query_icp():
     return {
         "icp_beian": settings.icp_beian,
         "icp_url": settings.icp_url,
+        "icp_entity": settings.icp_entity,
     }

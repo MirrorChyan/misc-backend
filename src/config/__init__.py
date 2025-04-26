@@ -9,6 +9,7 @@ class Settings(BaseSettings):
     database_passwd: str
     icp_beian: str
     icp_url: str
+    icp_entity: str
 
     class Config:
         env_file = ".env"
