@@ -38,7 +38,7 @@ async def query_anno(type_id: str = "GameTools"):
                     "popular": p.popular,
                     "title": p.title,
                     "price": p.price,
-                    "orignal_price": p.orignal_price,
+                    "original_price": p.original_price,
                 }
             )
         else:
@@ -50,7 +50,7 @@ async def query_anno(type_id: str = "GameTools"):
                     "popular": p.popular,
                     "title": p.title,
                     "price": p.price,
-                    "orignal_price": p.orignal_price,
+                    "original_price": p.original_price,
                 }
             )
 

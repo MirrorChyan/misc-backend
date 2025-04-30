@@ -53,7 +53,7 @@ class Plan(Model):
     available = BooleanField()
     title = TextField()
     price = CharField()
-    orignal_price = CharField()
+    original_price = CharField()
 
     class Meta:
         database = db
