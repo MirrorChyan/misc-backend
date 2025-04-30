@@ -51,6 +51,9 @@ class Plan(Model):
     type_id = CharField()
     popular = IntegerField()
     available = BooleanField()
+    title = TextField()
+    price = CharField()
+    orignal_price = CharField()
 
     class Meta:
         database = db

@@ -1,5 +1,4 @@
-from datetime import datetime
-from fastapi import APIRouter, Request
+from fastapi import APIRouter
 from loguru import logger
 from time import time
 
@@ -37,6 +36,9 @@ async def query_anno(type_id: str = "GameTools"):
                     "plan_id": p.plan_id,
                     "type_id": p.type_id,
                     "popular": p.popular,
+                    "title": p.title,
+                    "price": p.price,
+                    "orignal_price": p.orignal_price,
                 }
             )
         else:
@@ -46,6 +48,9 @@ async def query_anno(type_id: str = "GameTools"):
                     "plan_id": p.plan_id,
                     "type_id": p.type_id,
                     "popular": p.popular,
+                    "title": p.title,
+                    "price": p.price,
+                    "orignal_price": p.orignal_price,
                 }
             )
 
