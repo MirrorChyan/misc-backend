@@ -76,6 +76,17 @@ class Project(Model):
         database = db
         table_name = "project"
 
+class ICP(Model):
+    domain = CharField()
+    beian = CharField()
+    entity = CharField()
+    url = CharField()
+
+    class Meta:
+        database = db
+        table_name = "icp"
+
 Anno.create_table()
 Plan.create_table()
 Project.create_table()
+ICP.create_table()

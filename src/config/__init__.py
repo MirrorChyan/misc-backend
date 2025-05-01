@@ -7,9 +7,7 @@ class Settings(BaseSettings):
     database_port: int
     database_user: str
     database_passwd: str
-    icp_beian: str
-    icp_url: str
-    icp_entity: str
+    
     static_app_dir: str
 
     class Config:
