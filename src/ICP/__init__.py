@@ -9,9 +9,7 @@ AllICP = ICP.select()
 
 
 @router.get("/icp")
-async def query_icp(request: Request):
-    domain = str(request.base_url)
-
+async def query_icp(domain: str):
     icp = next(
         (icp for icp in AllICP if icp.domain in domain),
         None,
