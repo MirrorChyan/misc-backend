@@ -10,6 +10,7 @@ class Settings(BaseSettings):
     icp_beian: str
     icp_url: str
     icp_entity: str
+    static_app_dir: str
 
     class Config:
         env_file = ".env"

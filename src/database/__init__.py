@@ -46,14 +46,15 @@ class Anno(Model):
 
 class Plan(Model):
     plan_index = IntegerField()
-    platform = CharField()
-    plan_id = CharField()
     type_id = CharField()
-    popular = IntegerField()
-    available = BooleanField()
+    plan_id = CharField()
     title = TextField()
     price = CharField()
     original_price = CharField()
+    popular = IntegerField()
+    available = BooleanField()
+    afdian_id = CharField()
+    yimapay_id = CharField()
 
     class Meta:
         database = db
