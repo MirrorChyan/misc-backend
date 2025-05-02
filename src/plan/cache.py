@@ -9,6 +9,6 @@ def get_plan_cache():
     
     global _plan_cache
     if not _plan_cache or (now - _plan_cache[1] > CacheExpiration):
-        _plan_cache = (Plan.select().where(Plan.available == True).order_by(Plan.plan_index), now)
+        _plan_cache = (Plan.select().order_by(Plan.plan_index), now)
 
     return _plan_cache[0]

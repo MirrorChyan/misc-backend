@@ -23,6 +23,7 @@ async def query_details(plan_id: str):
         "ec": 200,
         "data": {
             "title": p.title,
+            "type_id": p.type_id,
             "price": p.price,
             "original_price": p.original_price,
             "popular": p.popular,

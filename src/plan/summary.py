@@ -20,6 +20,9 @@ async def query_plan(type_id: str = "GameTools"):
     }
 
     for p in get_plan_cache():
+        if not p.available:
+            continue
+
         if p.type_id == type_id:
             data["home"].append(
                 {
