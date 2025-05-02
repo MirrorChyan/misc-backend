@@ -15,12 +15,12 @@ async def query_details(plan_id: str):
         return {"ec": 400, "msg": "plan_id is required"}
 
     p = next((p for p in get_plan_cache() if p.plan_id == plan_id), None)
-    if not plan_id:
+    if not p:
         logger.error(f"plan_id not found")
         return {"ec": 404, "msg": "plan_id not found"}
 
 
-    afdian_info = [s.strip() for s in p.afdian_info.split(",")]
+    afdian_info = [s.strip() for s in p.afdian_id.split(",")]
     if len(afdian_info) != 2:
         logger.error(f"afdian_info is invalid")
         return {"ec": 500, "msg": "afdian_info is invalid"}
