@@ -46,11 +46,15 @@ class Anno(Model):
 
 class Plan(Model):
     plan_index = IntegerField()
-    platform = CharField()
-    plan_id = CharField()
     type_id = CharField()
+    plan_id = CharField()
+    title = TextField()
+    price = CharField()
+    original_price = CharField()
     popular = IntegerField()
     available = BooleanField()
+    afdian_id = CharField()
+    yimapay_id = CharField()
 
     class Meta:
         database = db
@@ -72,6 +76,17 @@ class Project(Model):
         database = db
         table_name = "project"
 
+class ICP(Model):
+    domain = CharField()
+    beian = CharField()
+    entity = CharField()
+    url = CharField()
+
+    class Meta:
+        database = db
+        table_name = "icp"
+
 Anno.create_table()
 Plan.create_table()
 Project.create_table()
+ICP.create_table()
