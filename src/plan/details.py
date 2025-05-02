@@ -19,6 +19,12 @@ async def query_details(plan_id: str):
         logger.error(f"plan_id not found")
         return {"ec": 404, "msg": "plan_id not found"}
 
+
+    afdian_info = [s.strip() for s in p.afdian_info.split(",")]
+    if len(afdian_info) != 2:
+        logger.error(f"afdian_info is invalid")
+        return {"ec": 500, "msg": "afdian_info is invalid"}
+
     return {
         "ec": 200,
         "data": {
@@ -27,7 +33,11 @@ async def query_details(plan_id: str):
             "price": p.price,
             "original_price": p.original_price,
             "popular": p.popular,
-            "afdian_id": p.afdian_id,
+            # "afdian_id": p.afdian_id,
+            "afdian_info": {
+                "plan_id": afdian_info[0],
+                "sku_id": afdian_info[1],
+            },
             "yimapay_id": p.yimapay_id,
         },
     }
