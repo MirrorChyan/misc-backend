@@ -41,5 +41,6 @@ async def query_details(plan_id: str):
             "popular": p.popular,
             "afdian_info": afdian_info,
             "yimapay_id": p.yimapay_id,
+            "weixin_id": p.weixin_id,
         },
     }

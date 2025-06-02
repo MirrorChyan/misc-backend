@@ -55,6 +55,7 @@ class Plan(Model):
     available = BooleanField()
     afdian_id = CharField()
     yimapay_id = CharField()
+    weixin_id = CharField()
 
     class Meta:
         database = db
