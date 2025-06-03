@@ -51,6 +51,7 @@ class Plan(Model):
     title = TextField()
     price = CharField()
     original_price = CharField()
+    checkout_price = CharField()
     popular = IntegerField()
     available = BooleanField()
     afdian_id = CharField()
