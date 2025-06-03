@@ -38,6 +38,7 @@ async def query_details(plan_id: str):
             "type_id": p.type_id,
             "price": p.price,
             "original_price": p.original_price,
+            "checkout_price": p.checkout_price,
             "popular": p.popular,
             "afdian_info": afdian_info,
             "yimapay_id": p.yimapay_id,
