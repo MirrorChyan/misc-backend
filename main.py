@@ -9,6 +9,7 @@ from src.plan.details import router as plan_details_router
 from src.health_check import router as health_check_router
 from src.project import router as project_router
 from src.ICP import router as icp_router
+from src.notify_admin import router as notify_admin_router
 
 app = FastAPI()
 
@@ -21,4 +22,5 @@ app.include_router(plan_details_router)
 app.include_router(health_check_router)
 app.include_router(project_router)
 app.include_router(icp_router)
+app.include_router(notify_admin_router)
 
