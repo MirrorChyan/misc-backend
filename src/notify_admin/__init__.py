@@ -11,6 +11,10 @@ async def notify_admin(request: Request):
     body = await request.json()
     logger.info(str(body))
 
+    if not settings.notify_admin_url:
+        logger.warning("no notify_admin_url, ignore")
+        return
+
     try:
         async with ClientSession() as session:
             async with session.post(
