@@ -43,5 +43,6 @@ async def query_details(plan_id: str):
             "afdian_info": afdian_info,
             "yimapay_id": p.yimapay_id,
             "weixin_id": p.weixin_id,
+            "alipay_id": p.alipay_id,
         },
     }

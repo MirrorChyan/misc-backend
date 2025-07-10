@@ -57,6 +57,7 @@ class Plan(Model):
     afdian_id = CharField()
     yimapay_id = CharField()
     weixin_id = CharField()
+    alipay_id = CharField()
 
     class Meta:
         database = db
