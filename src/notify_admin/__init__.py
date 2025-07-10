@@ -20,6 +20,7 @@ async def notify_admin(request: Request):
             async with session.post(
                 settings.notify_admin_url, json=body
             ) as response:
-                pass
+                if response.status < 200 or response.status >= 300:
+                    logger.warning(f"notify_admin failed with status {response.status}, body: {body}")
     except Exception as e:
         logger.error(f"notify_admin error: {e}, body: {body}")
