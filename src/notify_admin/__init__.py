@@ -22,4 +22,4 @@ async def notify_admin(request: Request):
             ) as response:
                 pass
     except Exception as e:
-        logger.error(f"notify_admin error: {e}, body: f{body}")
+        logger.error(f"notify_admin error: {e}, body: {body}")
