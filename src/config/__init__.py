@@ -10,6 +10,8 @@ class Settings(BaseSettings):
     
     static_app_dir: str
 
+    notify_admin_url: str
+
     class Config:
         env_file = ".env"
 
