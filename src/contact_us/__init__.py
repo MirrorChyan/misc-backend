@@ -14,7 +14,7 @@ def get_cache():
     
     global cache
     if not cache or (now - cache[1] > CacheExpiration):
-        cache = (ContactUs.select(), now)
+        cache = (list(ContactUs.select()), now)
 
     return cache[0]
 
