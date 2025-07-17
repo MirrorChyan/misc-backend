@@ -12,6 +12,11 @@ class Settings(BaseSettings):
 
     notify_admin_url: str
 
+    redis_host: str = "redis"
+    redis_port: int = 6379
+    redis_db: int = 0
+    redis_password: str = ""
+
     class Config:
         env_file = ".env"
 
