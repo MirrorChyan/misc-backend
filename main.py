@@ -10,6 +10,7 @@ from src.health_check import router as health_check_router
 from src.project import router as project_router
 from src.ICP import router as icp_router
 from src.notify_admin import router as notify_admin_router
+from src.contact_us import router as contact_us_router
 
 app = FastAPI()
 
@@ -23,4 +24,4 @@ app.include_router(health_check_router)
 app.include_router(project_router)
 app.include_router(icp_router)
 app.include_router(notify_admin_router)
-
+app.include_router(contact_us_router)
