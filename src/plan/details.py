@@ -14,7 +14,7 @@ async def query_details(plan_id: str):
         logger.error(f"plan_id is required")
         return {"ec": 400, "msg": "plan_id is required"}
 
-    p = next((p for p in get_plan_cache() if p.plan_id == plan_id), None)
+    p = next((p for p in await get_plan_cache() if p.plan_id == plan_id), None)
     if not p:
         logger.error(f"plan_id not found")
         return {"ec": 404, "msg": "plan_id not found"}

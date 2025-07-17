@@ -89,7 +89,16 @@ class ICP(Model):
         database = db
         table_name = "icp"
 
+class ContactUs(Model):
+    channel = CharField(primary_key=True)
+    detail = TextField()
+
+    class Meta:
+        database = db
+        table_name = "contact_us"
+
 Anno.create_table()
 Plan.create_table()
 Project.create_table()
 ICP.create_table()
+ContactUs.create_table()

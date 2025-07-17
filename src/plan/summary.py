@@ -19,7 +19,7 @@ async def query_plan(type_id: str = "GameTools"):
         "more": [],
     }
 
-    for p in get_plan_cache():
+    for p in await get_plan_cache():
         if not p.available:
             continue
 
