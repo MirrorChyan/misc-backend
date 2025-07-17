@@ -17,7 +17,8 @@ async def cache_clear_subscriber():
         logger.info("start subscribe misc cache listener")
 
         async for message in pubsub.listen():
-            if message:
+            if message["type"] == "message":
+                logger.info("evict message received: {}".format(message))
                 await clean_plan_cache()
                 await clean_contact_cache()
 
