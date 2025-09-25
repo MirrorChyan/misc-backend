@@ -1,4 +1,4 @@
-from fastapi import Request, APIRouter
+from fastapi import Request, APIRouter, HTTPException
 from aiohttp import ClientSession
 from loguru import logger
 
@@ -8,7 +8,12 @@ router = APIRouter()
 
 @router.post("/notify_admin")
 async def notify_admin(request: Request):
-    body = await request.json()
+    try:
+        body = await request.json()
+    except Exception as e:
+        logger.error(f"notify_admin invalid json: {e}")
+        raise HTTPException(status_code=400, detail="Invalid JSON")
+
     logger.info(str(body))
 
     if not settings.notify_admin_url:
