@@ -8,7 +8,6 @@ cache_lock = asyncio.Lock()
 
 
 async def get_plan_cache():
-
     global _plan_cache
 
     async with cache_lock:
@@ -17,3 +16,10 @@ async def get_plan_cache():
             _plan_cache = (list(Plan.select().order_by(Plan.plan_index)), now)
 
     return _plan_cache[0]
+
+
+async def clean_plan_cache():
+    global _plan_cache
+
+    async with cache_lock:
+        _plan_cache = None
