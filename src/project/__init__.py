@@ -43,8 +43,7 @@ async def query_project(type_id: str = "GameTools"):
             ],
             "download": p.download,
         }
-        for p in project_cache[0]
-        if p.type_id == type_id
+        for p in sorted(project_cache[0], key=lambda p: p.type_id != type_id)
     ]
 
     return {"ec": 200, "data": data}
