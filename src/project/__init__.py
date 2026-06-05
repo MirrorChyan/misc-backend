@@ -1,13 +1,19 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from loguru import logger
+from pydantic import BaseModel
 from time import time
 
-from src.database import Project
+from src.config import settings
+from src.database import Project, db
 
 router = APIRouter()
 
 CacheExpiration = 60  # 秒
 project_cache = None
+
+
+class ReorderRequest(BaseModel):
+    rid_list: list[str]
 
 
 @router.get("/project")
@@ -47,3 +53,25 @@ async def query_project(type_id: str = "GameTools"):
     ]
 
     return {"ec": 200, "data": data}
+
+
+@router.post("/project/reorder/{secret}")
+async def reorder_project(secret: str, req: ReorderRequest):
+    if not settings.admin_secret or secret != settings.admin_secret:
+        raise HTTPException(status_code=403, detail="Forbidden")
+
+    all_projects = list(Project.select())
+    db_rids = {p.rid for p in all_projects}
+
+    ordered_rids = [rid for rid in req.rid_list if rid in db_rids]
+    remaining_rids = [p.rid for p in sorted(all_projects, key=lambda p: p.proj_index) if p.rid not in set(ordered_rids)]
+    final_order = ordered_rids + remaining_rids
+
+    with db.atomic():
+        for idx, rid in enumerate(final_order):
+            Project.update(proj_index=idx).where(Project.rid == rid).execute()
+
+    global project_cache
+    project_cache = None
+
+    return {"ec": 200, "msg": "ok"}
