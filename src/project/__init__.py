@@ -16,6 +16,18 @@ class ReorderRequest(BaseModel):
     rid_list: list[str]
 
 
+class CreateProjectRequest(BaseModel):
+    rid: str
+    name: str
+    desc: str
+    image: str = ""
+    url: str
+    platform: str
+    type_id: str = "GameTools"
+    download: bool = True
+    available: bool = True
+
+
 @router.get("/project")
 async def query_project(type_id: str = "GameTools"):
     logger.debug(f"type_id: {type_id}")
@@ -70,6 +82,32 @@ async def reorder_project(secret: str, req: ReorderRequest):
     with db.atomic():
         for idx, rid in enumerate(final_order):
             Project.update(proj_index=idx).where(Project.rid == rid).execute()
+
+    global project_cache
+    project_cache = None
+
+    return {"ec": 200, "msg": "ok"}
+
+
+@router.post("/project/create/{secret}")
+async def create_project(secret: str, req: CreateProjectRequest):
+    if not settings.admin_secret or secret != settings.admin_secret:
+        raise HTTPException(status_code=403, detail="Forbidden")
+
+    max_index = Project.select(Project.proj_index).order_by(Project.proj_index.desc()).limit(1).scalar() or 0
+
+    Project.create(
+        type_id=req.type_id,
+        proj_index=max_index + 1,
+        rid=req.rid,
+        name=req.name,
+        desc=req.desc,
+        image=req.image,
+        url=req.url,
+        platform=req.platform,
+        download=req.download,
+        available=req.available,
+    )
 
     global project_cache
     project_cache = None
