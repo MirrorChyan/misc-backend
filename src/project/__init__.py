@@ -13,10 +13,23 @@ project_cache = None
 
 
 class ReorderRequest(BaseModel):
+    type_id: str
     rid_list: list[str]
 
 
 class CreateProjectRequest(BaseModel):
+    rid: str
+    name: str
+    desc: str
+    image: str = ""
+    url: str
+    platform: str
+    type_id: str = "GameTools"
+    download: bool = True
+    available: bool = True
+
+
+class UpdateProjectRequest(BaseModel):
     rid: str
     name: str
     desc: str
@@ -44,7 +57,7 @@ async def query_project(type_id: str = "GameTools"):
             .where(
                 Project.available == True,
             )
-            .order_by(Project.proj_index),
+            .order_by(Project.type_id, Project.proj_index),
             now,
         )
 
@@ -67,18 +80,85 @@ async def query_project(type_id: str = "GameTools"):
     return {"ec": 200, "data": data}
 
 
+@router.get("/project/list")
+async def list_projects(type_id: str = ""):
+    query = Project.select()
+    if type_id:
+        query = query.where(Project.type_id == type_id)
+    query = query.order_by(Project.type_id, Project.proj_index)
+
+    data = [
+        {
+            "type_id": p.type_id,
+            "proj_index": p.proj_index,
+            "rid": p.rid,
+            "name": p.name,
+            "desc": p.desc,
+            "image": p.image,
+            "url": p.url,
+            "platform": p.platform,
+            "download": p.download,
+            "available": p.available,
+        }
+        for p in query
+    ]
+
+    return {"ec": 200, "data": data}
+
+
 @router.post("/project/reorder")
 async def reorder_project(req: ReorderRequest):
-    all_projects = list(Project.select())
-    db_rids = {p.rid for p in all_projects}
+    type_id = req.type_id
+    rid_list = req.rid_list
 
-    ordered_rids = [rid for rid in req.rid_list if rid in db_rids]
-    remaining_rids = [p.rid for p in sorted(all_projects, key=lambda p: p.proj_index) if p.rid not in set(ordered_rids)]
-    final_order = ordered_rids + remaining_rids
+    if not type_id:
+        return {"ec": 400, "msg": "type_id is required"}
+    if not rid_list:
+        return {"ec": 400, "msg": "rid_list is required"}
+    if len(rid_list) != len(set(rid_list)):
+        return {"ec": 400, "msg": "rid_list contains duplicates"}
+
+    db_rids = {p.rid for p in Project.select(Project.rid).where(Project.type_id == type_id)}
+    if set(rid_list) != db_rids:
+        return {"ec": 400, "msg": "rid_list must exactly match all rids of this type_id"}
 
     with db.atomic():
-        for idx, rid in enumerate(final_order):
+        for idx, rid in enumerate(rid_list):
             Project.update(proj_index=idx).where(Project.rid == rid).execute()
+
+    global project_cache
+    project_cache = None
+
+    return {"ec": 200, "msg": "ok"}
+
+
+@router.post("/project/update")
+async def update_project(req: UpdateProjectRequest):
+    project = Project.get_or_none(Project.rid == req.rid)
+    if project is None:
+        logger.error(f"project not found: {req.rid}")
+        return {"ec": 404, "msg": "project not found"}
+
+    moved = req.type_id != project.type_id
+
+    project.type_id = req.type_id
+    project.name = req.name
+    project.desc = req.desc
+    project.image = req.image
+    project.url = req.url
+    project.platform = req.platform
+    project.download = req.download
+    project.available = req.available
+    if moved:
+        max_index = (
+            Project.select(Project.proj_index)
+            .where((Project.type_id == req.type_id) & (Project.rid != req.rid))
+            .order_by(Project.proj_index.desc())
+            .limit(1)
+            .scalar()
+        )
+        project.proj_index = (max_index + 1) if max_index is not None else 0
+    project.save()
 
     global project_cache
     project_cache = None
@@ -88,22 +168,47 @@ async def reorder_project(req: ReorderRequest):
 
 @router.post("/project/create")
 async def create_project(req: CreateProjectRequest):
-    max_index = Project.select(Project.proj_index).order_by(Project.proj_index.desc()).limit(1).scalar() or 0
+    if Project.get_or_none(Project.rid == req.rid) is not None:
+        logger.error(f"rid already exists: {req.rid}")
+        return {"ec": 400, "msg": "rid already exists"}
 
-    Project.create(
-        type_id=req.type_id,
-        proj_index=max_index + 1,
-        rid=req.rid,
-        name=req.name,
-        desc=req.desc,
-        image=req.image,
-        url=req.url,
-        platform=req.platform,
-        download=req.download,
-        available=req.available,
-    )
+    with db.atomic():
+        max_index = (
+            Project.select(Project.proj_index)
+            .where(Project.type_id == req.type_id)
+            .order_by(Project.proj_index.desc())
+            .limit(1)
+            .scalar()
+        )
+        new_index = (max_index + 1) if max_index is not None else 0
+        project = Project.create(
+            type_id=req.type_id,
+            proj_index=new_index,
+            rid=req.rid,
+            name=req.name,
+            desc=req.desc,
+            image=req.image,
+            url=req.url,
+            platform=req.platform,
+            download=req.download,
+            available=req.available,
+        )
 
     global project_cache
     project_cache = None
 
-    return {"ec": 200, "msg": "ok"}
+    return {
+        "ec": 200,
+        "data": {
+            "type_id": project.type_id,
+            "proj_index": project.proj_index,
+            "rid": project.rid,
+            "name": project.name,
+            "desc": project.desc,
+            "image": project.image,
+            "url": project.url,
+            "platform": project.platform,
+            "download": project.download,
+            "available": project.available,
+        },
+    }
