@@ -67,11 +67,8 @@ async def query_project(type_id: str = "GameTools"):
     return {"ec": 200, "data": data}
 
 
-@router.post("/project/reorder/{secret}")
-async def reorder_project(secret: str, req: ReorderRequest):
-    if not settings.admin_secret or secret != settings.admin_secret:
-        raise HTTPException(status_code=403, detail="Forbidden")
-
+@router.post("/project/reorder")
+async def reorder_project(req: ReorderRequest):
     all_projects = list(Project.select())
     db_rids = {p.rid for p in all_projects}
 
@@ -89,11 +86,8 @@ async def reorder_project(secret: str, req: ReorderRequest):
     return {"ec": 200, "msg": "ok"}
 
 
-@router.post("/project/create/{secret}")
-async def create_project(secret: str, req: CreateProjectRequest):
-    if not settings.admin_secret or secret != settings.admin_secret:
-        raise HTTPException(status_code=403, detail="Forbidden")
-
+@router.post("/project/create")
+async def create_project(req: CreateProjectRequest):
     max_index = Project.select(Project.proj_index).order_by(Project.proj_index.desc()).limit(1).scalar() or 0
 
     Project.create(
