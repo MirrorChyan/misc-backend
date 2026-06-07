@@ -12,6 +12,7 @@ class Settings(BaseSettings):
 
     notify_admin_url: str
 
+
     class Config:
         env_file = ".env"
 
